@@ -3,50 +3,46 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Calendar</title>
+  <title>Minimal Calendar</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
-
     <div class="calendar-container">
-
       <header>
-        <div class="day" id="header-day">18</div>
-        <div class="month" id="header-month">August</div>
+        <div class="day" id="header-day">1</div>
+        <div class="month" id="header-month">january</div>
       </header>
 
       <table class="calendar">
         <thead>
           <tr>
-            <td>Mon</td>
-            <td>Tue</td>
-            <td>Wed</td>
-            <td>Thu</td>
-            <td>Fri</td>
-            <td>Sat</td>
-            <td>Sun</td>
+            <td>MON</td>
+            <td>TUE</td>
+            <td>WED</td>
+            <td>THU</td>
+            <td>FRI</td>
+            <td>SAT</td>
+            <td>SUN</td>
           </tr>
         </thead>
         <tbody id="calendar-body">
-          <!-- Filled dynamically by JavaScript -->
+          <!-- filled by JavaScript -->
         </tbody>
       </table>
 
       <div class="ring-left"></div>
       <div class="ring-right"></div>
-
-    </div> <!-- end calendar-container -->
-
-  </div> <!-- end container -->
+    </div>
+  </div>
 
   <script>
     (function () {
       const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december"
       ];
 
       const today = new Date();
@@ -58,32 +54,28 @@
       const headerMonthEl = document.getElementById("header-month");
       const calendarBody = document.getElementById("calendar-body");
 
-      // Set header to today's real date
       headerDayEl.textContent = todayDate;
       headerMonthEl.textContent = monthNames[currentMonth];
 
       function renderCalendar(year, month) {
-        // Clear any existing rows
         calendarBody.innerHTML = "";
 
-        // Month info
         const firstOfMonth = new Date(year, month, 1);
         const lastOfMonth = new Date(year, month + 1, 0);
         const daysInMonth = lastOfMonth.getDate();
 
-        // Previous month info (for leading days)
         const lastOfPrevMonth = new Date(year, month, 0);
         const daysInPrevMonth = lastOfPrevMonth.getDate();
 
         // JS getDay(): 0 (Sun)–6 (Sat)
-        // Our calendar starts on Monday, so convert:
-        const rawFirstWeekday = firstOfMonth.getDay(); // 0–6
-        const startIndex = (rawFirstWeekday + 6) % 7;  // 0 (Mon)–6 (Sun)
+        // Convert to Monday=0…Sunday=6
+        const rawFirstWeekday = firstOfMonth.getDay();
+        const startIndex = (rawFirstWeekday + 6) % 7;
 
         const totalCells = startIndex + daysInMonth;
         const rows = Math.ceil(totalCells / 7);
 
-        let currentDay = 1; // for this month
+        let currentDay = 1;
 
         for (let row = 0; row < rows; row++) {
           const tr = document.createElement("tr");
@@ -93,18 +85,18 @@
             const td = document.createElement("td");
 
             if (cellIndex < startIndex) {
-              // Leading days from previous month
+              // previous month days
               const prevDay = daysInPrevMonth - (startIndex - 1 - cellIndex);
               td.textContent = prevDay;
               td.classList.add("prev-month");
             } else if (currentDay > daysInMonth) {
-              // Trailing days from next month
+              // next month days
               const nextDay = currentDay - daysInMonth;
               td.textContent = nextDay;
               td.classList.add("next-month");
               currentDay++;
             } else {
-              // Actual days of current month
+              // current month
               td.textContent = currentDay;
 
               if (
@@ -125,7 +117,6 @@
         }
       }
 
-      // Render current month on load
       renderCalendar(currentYear, currentMonth);
     })();
   </script>
